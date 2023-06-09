@@ -23,7 +23,7 @@ Configuração:
 
 4. Configure o banco de dados:
     - Crie um novo banco de dados no PostgreSQL ou MSSQL Server.
-    - Importe o arquivo de backup do banco de dados fornecido (salesproducts.sql) usando a ferramenta de backup/restauração do seu banco de dados.
+    - Importe o arquivo de backup do banco de dados fornecido (salesproducts.backup) usando a ferramenta de backup/restauração do seu banco de dados.
     - Edite o arquivo config.php na raiz do projeto e atualize as informações de conexão com o banco de dados.
 
 5. Inicie o servidor PHP embutido:
@@ -37,4 +37,4 @@ Funcionalidades:
 
 Observações:
 - O sistema foi desenvolvido sem o uso de frameworks como Laravel, Symfony ou CodeIgniter, mas foram utilizadas bibliotecas como Bootstrap e Material Design para facilitar o desenvolvimento da interface.
-- O arquivo de backup do banco de dados está localizado na raiz do repositório com o nome salesproducts.sql.
+- O arquivo de backup do banco de dados está localizado na raiz do repositório com o nome salesproducts.backup.
