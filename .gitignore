@@ -1,0 +1,38 @@
+# Ignorar arquivos e diretórios gerados pelo Composer
+/vendor
+/composer.lock
+
+# Ignorar diretórios específicos
+/node_modules
+/public/uploads
+
+# Ignorar arquivos de configuração local
+/config/.env
+
+# Ignorar arquivos de logs
+/log/*.log
+
+# Ignorar arquivos de cache
+/var/cache/*
+
+# Ignorar arquivos de sessão
+/var/sessions/*
+
+# Ignorar arquivos de build gerados
+/build
+
+# Ignorar arquivos de dependências de desenvolvimento
+/dev-dependencies
+
+# Ignorar arquivos de ambiente
+.env
+.env.*
+
+# Ignorar arquivos de IDEs e editores de texto
+.idea/
+.vscode/
+
+# Ignorar arquivos de backup
+*.bak
+*.swp
+*~
