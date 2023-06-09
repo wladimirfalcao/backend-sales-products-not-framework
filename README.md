@@ -11,7 +11,7 @@ Configuração:
 
 1. Clone o repositório em sua máquina local:
 
-   git clone https://github.com/seu-usuario/desafio-tecnico-mercado.git
+   git clone https://github.com/wladimirfalcao/backend-sales-products-not-framework.git
 
 2. Navegue até o diretório do projeto:
 
