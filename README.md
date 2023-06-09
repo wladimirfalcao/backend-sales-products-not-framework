@@ -15,7 +15,7 @@ Configuração:
 
 2. Navegue até o diretório do projeto:
 
-   cd backend
+   cd backend-sales-products-not-framework
 
 3. Instale as dependências usando o Composer:
 
