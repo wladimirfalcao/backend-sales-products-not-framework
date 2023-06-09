@@ -2,10 +2,12 @@
 
 namespace App\Tests;
 
-use App\Models\ProductModel;
-use PHPUnit\Framework\TestCase;
+use App\Controllers\ProductTypeController;
 use App\Controllers\ProductController;
 use App\Controllers\SaleController;
+use App\Models\ProductModel;
+use App\Models\ProductTypeModel;
+use PHPUnit\Framework\TestCase;
 
 
 class ControllersTest extends TestCase
@@ -14,45 +16,76 @@ class ControllersTest extends TestCase
 
     protected function setUp(): void
     {
-        // Configuração do banco de dados de teste
 
         $host     = 'localhost';
-        $dbname   = 'products';
+        $dbname   = 'josew';
         $username = 'postgres';
         $password = '';
         $schema   = 'public';
 
+        try {
+            $this->pdo = new \PDO("pgsql:host=$host;dbname=$dbname;options='--search_path=$schema'", $username, $password);
+            $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Erro ao conectar com o banco de dados: ' . $e->getMessage());
+        }
 
-        $pdo = new \PDO("pgsql:host=$host;dbname=$dbname;options='--search_path=$schema'", $username, $password);
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        // Executa os scripts SQL de criação das tabelas necessárias
-//        $this->pdo->exec(file_get_contents('create_tables.sql'));
     }
 
     protected function tearDown(): void
     {
-        // Limpa as tabelas após cada teste
-        $this->pdo->exec('TRUNCATE TABLE products');
         $this->pdo->exec('TRUNCATE TABLE sales');
+        $this->pdo->exec('TRUNCATE TABLE sold_items');
+        $this->pdo->exec('TRUNCATE TABLE products, product_types CASCADE');
     }
+
+    public function testAddProductType()
+    {
+        $productTypeController = new ProductTypeController($this->pdo);
+
+        $postData = [
+            'name' => 'Tipo de Produto',
+            'tax_percentage' => 7.5,
+        ];
+
+        $_POST = $postData;
+        $response = $productTypeController->add();
+
+        $this->assertArrayHasKey('success', $response);
+        $this->assertTrue($response['success']);
+        $this->assertEquals('Product type added successfully!', $response['message']);
+        $this->assertArrayHasKey('typeId', $response);
+
+        $productTypeModel = new ProductTypeModel($this->pdo);
+        $productType = $productTypeModel->getTypeById($response['typeId']);
+
+        $this->assertNotEmpty($productType);
+        $this->assertEquals($postData['name'], $productType['name']);
+        $this->assertEquals($postData['tax_percentage'], $productType['tax_percentage']);
+    }
+
 
     public function testAddProduct()
     {
-        $productController = new ProductController($this->pdo);
+
+        $typeModel = new ProductTypeModel($this->pdo);
+        $typeId = $typeModel->add(7.5, 'Test tax');
 
         $postData = [
             'name'   => 'Produto de Teste',
             'price'  => 10.99,
-            'typeId' => 2
+            'typeId' => $typeId
         ];
 
         $_POST    = $postData;
+
+        $productController = new ProductController($this->pdo);
         $response = $productController->add();
+
 
         $this->assertArrayHasKey('success', $response);
         $this->assertTrue($response['success']);
-        $this->assertEquals('Produto cadastrado com sucesso!', $response['message']);
+        $this->assertEquals('Product registered successfully!', $response['message']);
         $this->assertArrayHasKey('productId', $response);
 
 
@@ -63,15 +96,33 @@ class ControllersTest extends TestCase
         $this->assertNotEmpty($product);
         $this->assertEquals($postData['name'], $product['name']);
         $this->assertEquals($postData['price'], $product['price']);
-        $this->assertEquals($postData['typeId'], $product['typeId']);
+        $this->assertEquals($postData['typeId'], $product['type_id']);
     }
 
     public function testAddSale()
     {
-        $saleController = new SaleController($this->pdo);
-        $response = $saleController->add();
+        $products = [
+            'products' => [
+                ['id' => 1, 'quantity' => 2],
+                ['id' => 2, 'quantity' => 3],
+            ]
+        ];
 
-        $this->assertArrayHasKey('success', $response);
-        $this->assertTrue($response['success']);
+        $saleController = new SaleController($this->pdo);
+
+        $_POST  = $products;
+        $result = $saleController->add();
+
+        $this->assertTrue($result['success']);
+
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM sales');
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        $this->assertEquals(1, $count);
+
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM sold_items');
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        $this->assertEquals(count($products['products']), $count);
     }
 }

@@ -36,7 +36,15 @@ class SaleController
 
     public function add()
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        $data = $_POST;
+        if (empty($data)) {
+            $jsonData = file_get_contents('php://input');
+            $data = json_decode($jsonData, true);
+        }
+
+        if (!isset($data['products'])) {
+            return ['success' => false, 'message' => 'Products are required!'];
+        }
 
         $products = $data['products'];
 
@@ -44,9 +52,9 @@ class SaleController
         $result = $saleModel->addSale($products);
 
         if ($result) {
-            $response = ['success' => true, 'saleId' => $result, 'message' => 'Venda registrada com sucesso!'];
+            $response = ['success' => true, 'saleId' => $result, 'message' => 'Sale registered successfully!'];
         } else {
-            $response = ['success' => false, 'message' => 'Erro ao registrar a venda.'];
+            $response = ['success' => false, 'message' => 'Error registering the sale!'];
         }
 
         return $response;

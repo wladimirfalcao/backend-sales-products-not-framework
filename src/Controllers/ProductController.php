@@ -16,12 +16,14 @@ class ProductController {
     }
 
     public function add() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data)
-            $data = $_POST;
+        $data = $_POST;
+        if (empty($data)) {
+            $jsonData = file_get_contents('php://input');
+            $data = json_decode($jsonData, true);
+        }
 
         if (!isset($data['name']) || !isset($data['price']) || !isset($data['typeId'])) {
-            return ['success' => false, 'message' => 'Nome, preço e tipo são campos obrigatórios.'];
+            return ['success' => false, 'message' => 'Name, price, and type are required fields!'];
         }
 
         $name = $data['name'];
@@ -32,9 +34,9 @@ class ProductController {
         $productId = $productModel->addProduct($name, $price, $typeId);
 
         if ($productId) {
-            $response = ['success' => true, 'message' => 'Produto cadastrado com sucesso!', 'productId' => $productId];
+            $response = ['success' => true, 'message' => 'Product registered successfully!', 'productId' => $productId];
         } else {
-            $response = ['success' => false, 'message' => 'Erro ao cadastrar o produto.'];
+            $response = ['success' => false, 'message' => 'Error while registering the product!'];
         }
 
         return $response;

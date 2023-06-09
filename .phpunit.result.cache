@@ -1,1 +1,1 @@
-{"version":1,"defects":{"App\\Tests\\ControllersTest::testAddProduct":4,"App\\Tests\\ControllersTest::testAddSale":4},"times":{"App\\Tests\\ControllersTest::testAddProduct":0.045,"App\\Tests\\ControllersTest::testAddSale":0.08}}
+{"version":1,"defects":{"App\\Tests\\ControllersTest::testAddProduct":3,"App\\Tests\\ControllersTest::testAddSale":3,"App\\Tests\\ControllersTest::testAddProductType":4},"times":{"App\\Tests\\ControllersTest::testAddProduct":0.37,"App\\Tests\\ControllersTest::testAddSale":0.342,"App\\Tests\\ControllersTest::testAddProductType":0.32}}

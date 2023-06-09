@@ -36,3 +36,6 @@
 *.bak
 *.swp
 *~
+
+.phpunit.*
+.phpunit.result.cache

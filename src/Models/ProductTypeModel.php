@@ -8,6 +8,17 @@ class ProductTypeModel {
         $this->pdo = $pdo;
     }
 
+    public function getTypeById($id){
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM product_types WHERE id = ?');
+            $stmt->execute([$id]);
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function getAll()
     {
         try {
@@ -25,7 +36,6 @@ class ProductTypeModel {
         try {
             $stmt = $this->pdo->prepare('INSERT INTO product_types (tax_percentage, name) VALUES (?, ?)');
             $stmt->execute([$tax, $name]);
-
             return $this->pdo->lastInsertId();
         } catch (\PDOException $e) {
             echo $e->getMessage();

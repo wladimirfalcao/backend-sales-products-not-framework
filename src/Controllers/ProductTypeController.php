@@ -16,10 +16,15 @@ class ProductTypeController {
     }
 
     public function add() {
-        $data = json_decode(file_get_contents('php://input'), true);
+
+        $data = $_POST;
+        if (empty($data)) {
+            $jsonData = file_get_contents('php://input');
+            $data = json_decode($jsonData, true);
+        }
 
         if (!isset($data['tax_percentage'])) {
-            return json_encode(['success' => false, 'message' => 'Taxa é obrigatório.']);
+            return ['success' => false, 'message' => 'Tax percentage is required!'];
         }
 
         $tax = $data['tax_percentage'];
@@ -29,11 +34,11 @@ class ProductTypeController {
         $id = $type->add($tax, $name);
 
         if ($id) {
-            $response = ['success' => true, 'message' => 'Produto cadastrado com sucesso!', 'typeId' => $id];
+            $response = ['success' => true, 'message' => 'Product type added successfully!', 'typeId' => $id];
         } else {
-            $response = ['success' => false, 'message' => 'Erro ao cadastrar o produto.'];
+            $response = ['success' => false, 'message' => 'Error adding the product type.'];
         }
 
-        return json_encode($response);
+        return $response;
     }
 }
