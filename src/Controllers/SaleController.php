@@ -29,7 +29,7 @@ class SaleController
         if ($sale) {
             $response = ['success' => true, 'sale' => $sale, 'sold_items' => $soldItems];
         } else {
-            $response = ['success' => false, 'message' => 'Registro não encontrado!'];
+            $response = ['success' => false, 'message' => 'Record not found!'];
         }
         return $response;
     }

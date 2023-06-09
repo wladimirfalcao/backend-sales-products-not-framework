@@ -20,10 +20,10 @@ class UserModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createUser($username, $password)
+    public function createUser($email, $password)
     {
-        $stmt = $this->pdo->prepare('INSERT INTO users (username, password) VALUES (:username, :password)');
-        $stmt->execute(['username' => $username, 'password' => $password]);
+        $stmt = $this->pdo->prepare('INSERT INTO users (email, password) VALUES (:email, :password)');
+        $stmt->execute(['email' => $email, 'password' => $password]);
         return $this->pdo->lastInsertId();
     }
 }

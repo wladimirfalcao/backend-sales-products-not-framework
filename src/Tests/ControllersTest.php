@@ -18,7 +18,7 @@ class ControllersTest extends TestCase
     {
 
         $host     = 'localhost';
-        $dbname   = 'josew';
+        $dbname   = 'test';
         $username = 'postgres';
         $password = '';
         $schema   = 'public';
@@ -27,7 +27,7 @@ class ControllersTest extends TestCase
             $this->pdo = new \PDO("pgsql:host=$host;dbname=$dbname;options='--search_path=$schema'", $username, $password);
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            die('Erro ao conectar com o banco de dados: ' . $e->getMessage());
+            die('Error connecting to the database. ' . $e->getMessage());
         }
 
     }
@@ -44,7 +44,7 @@ class ControllersTest extends TestCase
         $productTypeController = new ProductTypeController($this->pdo);
 
         $postData = [
-            'name' => 'Tipo de Produto',
+            'name' => 'Product Type Test',
             'tax_percentage' => 7.5,
         ];
 
@@ -72,7 +72,7 @@ class ControllersTest extends TestCase
         $typeId = $typeModel->add(7.5, 'Test tax');
 
         $postData = [
-            'name'   => 'Produto de Teste',
+            'name'   => 'Product Test',
             'price'  => 10.99,
             'typeId' => $typeId
         ];

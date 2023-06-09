@@ -19,21 +19,25 @@ class UserController
     public function register()
     {
 
-        $data = json_decode(file_get_contents('php://input'), true);
-        $username = $data['username'];
+        $data = $_POST;
+        if (empty($data)) {
+            $jsonData = file_get_contents('php://input');
+            $data = json_decode($jsonData, true);
+        }
+        $email = $data['email'];
         $password = $data['password'];
 
-        if ($this->userModel->getUserByUsername($username)) {
-            return ['success' => false, 'message' => 'Usuario já exite!'];
+        if ($this->userModel->getUserByUsername($email)) {
+            return ['success' => false, 'message' => 'User already exists!'];
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $userId = $this->userModel->createUser($username, $hashedPassword);
+        $userId = $this->userModel->createUser($email, $hashedPassword);
 
         if ($userId) {
-            $response = ['success' => true, 'message' => 'Registrada com sucesso!'];
+            $response = ['success' => true, 'message' => 'Successfully registered!'];
         } else {
-            $response = ['success' => false, 'message' => 'Erro ao registrar a usuario.'];
+            $response = ['success' => false, 'message' => 'Error while registering the user!'];
         }
 
         return $response;

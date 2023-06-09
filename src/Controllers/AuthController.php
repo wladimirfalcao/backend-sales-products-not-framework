@@ -23,9 +23,9 @@ class AuthController
         $user = $this->authenticateUser($email, $password);
 
         if ($user) {
-            $response = ['success' => true, 'message' => 'Autenticação bem-sucedida', 'data' => $user];
+            $response = ['success' => true, 'message' => 'Authentication successful', 'data' => $user];
         } else {
-            $response = ['success' => false, 'message' => 'Credenciais inválidas'];
+            $response = ['success' => false, 'message' => 'Invalid credentials'];
         }
 
         return $response;
@@ -62,7 +62,7 @@ class AuthController
             $stmt->execute();
             return $token;
         } catch (\PDOException $e) {
-            echo "Erro ao atualizar registro: " . $e->getMessage();
+            echo "Error updating record " . $e->getMessage();
         }
     }
 
